@@ -1,10 +1,13 @@
 {
   "name": "@figify/gh-metrics",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tool for calculating issues and pull requests metrics on GitHub given a repository",
   "main": "index.js",
+  "bin": {
+    "gh-metrics": "./index.js"
+  },
   "scripts": {
-    "gh-metrics": "node index",
+    "gh-metrics": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

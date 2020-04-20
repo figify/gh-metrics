@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+// 👆 Used to tell Node.js that this is a CLI tool
+
 const argv = require('yargs').argv
 const chalk = require('chalk');
 const downloaders = require('./downloaders');
