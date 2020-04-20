@@ -1,0 +1,39 @@
+{
+  "name": "@figify/gh-metrics",
+  "version": "0.1.0",
+  "description": "A tool for calculating issues and pull requests metrics on GitHub given a repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/figify/gh-metrics.git"
+  },
+  "keywords": [
+    "github",
+    "pull-requests",
+    "pull requests",
+    "devops",
+    "code reviews",
+    "metrics",
+    "team",
+    "issues",
+    "analytics",
+    "statistics"
+  ],
+  "author": "Kyriakos Chatzidimitriou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/figify/gh-metrics/issues"
+  },
+  "homepage": "https://github.com/figify/gh-metrics#readme",
+  "dependencies": {
+    "@octokit/graphql": "^4.3.1",
+    "bluebird": "^3.7.2",
+    "chalk": "^4.0.0",
+    "lodash": "^4.17.15",
+    "ora": "^4.0.3",
+    "yargs": "^15.3.1"
+  }
+}
