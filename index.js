@@ -71,12 +71,11 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
         log(chalk.green(`Open Issues: ${open}`));
         log(chalk.green(`Closed Issues: ${issues.length - open}`));
         const timeToClose = _.chain(issues).filter(issue => issue.state === 'CLOSED').meanBy(issue => Date.parse(issue.closedAt) - Date.parse(issue.createdAt)).value()/millisToDays;
-        log(chalk.green(`Average Time to Close: ${timeToClose} days (does not account for issues closed and re-opened)`));
-        // Average number of assignees per issue
-        // Average number of labels per issue
-        // Average number of comments per issue
+        log(chalk.green(`Average Time to Close: ${timeToClose.toFixed(2)} days (does not account for issues closed and re-opened)`));
+        // TODO(kyrcha): Average number of assignees per issue
+        // TODO(kyrcha): Average number of labels per issue
         const avgCommentsPerIssue = _.meanBy(issues, issue => issue.comments.length);
-        log(chalk.green(`Average Comments per Issue: ${avgCommentsPerIssue}`));
+        log(chalk.green(`Average Comments per Issue: ${avgCommentsPerIssue.toFixed(2)}`));
 
         // PRs
         log(chalk.green(`${pullRequests.length} pull requests retrieved!`));
@@ -87,17 +86,17 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
         const mergedPRs = _.filter(pullRequests, pullRequest => pullRequest.state === 'MERGED').length;
         log(chalk.green(`Merged PRs: ${mergedPRs}`));
         const timeToMerge = _.chain(pullRequests).filter(pr => pr.state === 'MERGED').meanBy(pr => Date.parse(pr.mergedAt) - Date.parse(pr.createdAt)).value()/millisToDays;
-        log(chalk.green(`Average Time to Merge: ${timeToMerge} days`));
+        log(chalk.green(`Average Time to Merge: ${timeToMerge.toFixed(2)} days`));
         const avgCommentsPerPR = _.meanBy(pullRequests, pr => pr.comments.length);
-        log(chalk.green(`Average Comments per PR: ${avgCommentsPerPR}`));
-        const avgCommentsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => pr.comments.length);
-        log(chalk.green(`Average Comments per PR (Closed or Merged): ${avgCommentsPerPRClosedMerged}`));
-        const avgReviewsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => pr.reviews.length);
-        log(chalk.green(`Average Reviews per PR (Closed or Merged): ${avgReviewsPerPRClosedMerged}`));
+        log(chalk.green(`Average Comments per PR: ${avgCommentsPerPR.toFixed(2)}`));
+        const avgCommentsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => pr.comments.length).value();
+        log(chalk.green(`Average Comments per PR (Closed or Merged): ${avgCommentsPerPRClosedMerged.toFixed(2)}`));
+        const avgReviewsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => pr.reviews.length).value();
+        log(chalk.green(`Average Reviews per PR (Closed or Merged): ${avgReviewsPerPRClosedMerged.toFixed(2)}`));
         const avgInteractionsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => (
             pr.reviews.length + pr.comments.length + _.chain(pr.reviews).map(review => review.comments).flatten().value().length
-            ));
-        log(chalk.green(`Average Interactions (comments, reviews, review comments) per PR (Closed or Merged): ${avgInteractionsPerPRClosedMerged}`));
+            )).value();
+        log(chalk.green(`Average Interactions (comments, reviews, review comments) per PR (Closed or Merged): ${avgInteractionsPerPRClosedMerged.toFixed(2)}`));
         process.exit(0);
     } catch (err) {
         spinner.fail('Retriever broke...');
