@@ -2,7 +2,21 @@
 
 > A command line tool that calculates pull-request and issue metrics given a GitHub repository
 
+![](assets/gh-metrics-usage.gif)
+
 ## Usage
+
+[Create a personal GitHub token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line#creating-a-token) with the scopes **repo**.
+
+Run the tool using `npx`:
+
+`GITHUB_TOKEN=<yout-token> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
+
+or straight:
+
+`npx @figify/gh-metrics --a <account org or user> --r <repository name>`
+
+if you have a `GITHUB_TOKEN` environment variable already set.
 
 Example for a dependency used:
 
@@ -26,6 +40,8 @@ The following metrics are calculated:
 
 ## Roadmap
 
+- Add GitHub Actions
+- Add some testing
 - Publish both to npm and GitHub registries
 - Do the calculations in memory instead of storing in memory everything
 - Store in csv/json files option
@@ -33,6 +49,8 @@ The following metrics are calculated:
 - Create a mini-site
 
 ## Contributing
+
+TODO
 
 ## Publishing guide
 

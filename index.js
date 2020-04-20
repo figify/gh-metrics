@@ -8,7 +8,7 @@ const { graphql } = require('@octokit/graphql');
 const util = require('util');
 const _ = require('lodash');
 const ora = require('ora');
-
+const prettyMilliseconds = require('pretty-ms');
 
 const log = console.log;
 
@@ -33,9 +33,10 @@ checks();
 const account = argv.a;
 const repo = argv.r;
 const ghToken = process.env.GITHUB_TOKEN;
-const millisToDays = 1000*60*60*24;
+const millisToHours = 1000*60*60;
+const millisToDays = millisToHours*24;
 const pageSize = 50;
-const smallPageSize = 10;
+const smallPageSize = 50;
 
 const graphqlWithAuth = graphql.defaults({
     headers: {
@@ -47,6 +48,7 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
 
 (async () => {
     try {
+        var start = new Date();
         var repository = await downloaders.downloadRepo(graphqlWithAuth, account, repo, pageSize);
         const totalIssues = repository.issues.totalCount;
         const totalPRs = repository.pullRequests.totalCount;
@@ -63,19 +65,19 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
 
         // Start analyzing
         // Repo
-        log(chalk.green("===== Analysis ====="));
-        log(chalk.green(`Stars: ${repository.stargazers.totalCount} | Forks: ${repository.forkCount} | Watchers: ${repository.watchers.totalCount}`));
+        log(chalk.white("===== Analysis ====="));
+        log(chalk.whiteBright(`Stars: ${repository.stargazers.totalCount} | Forks: ${repository.forkCount} | Watchers: ${repository.watchers.totalCount}`));
         // Issues
         const open = _.filter(issues, issue => issue.state === 'OPEN').length;
-        log(chalk.green(`${issues.length} issues retrieved!`));
-        log(chalk.green(`Open Issues: ${open}`));
-        log(chalk.green(`Closed Issues: ${issues.length - open}`));
-        const timeToClose = _.chain(issues).filter(issue => issue.state === 'CLOSED').meanBy(issue => Date.parse(issue.closedAt) - Date.parse(issue.createdAt)).value()/millisToDays;
-        log(chalk.green(`Average Time to Close: ${timeToClose.toFixed(2)} days (does not account for issues closed and re-opened)`));
+        log(chalk.greenBright(`${issues.length} issues retrieved!`));
+        log(chalk.greenBright(`Open Issues: ${open}`));
+        log(chalk.greenBright(`Closed Issues: ${issues.length - open}`));
+        const timeToClose = _.chain(issues).filter(issue => issue.state === 'CLOSED').meanBy(issue => Date.parse(issue.closedAt) - Date.parse(issue.createdAt)).value();
+        log(chalk.greenBright(`Average Time to Close: ${prettyMilliseconds(timeToClose)} (does not account for issues closed and re-opened)`));
         // TODO(kyrcha): Average number of assignees per issue
         // TODO(kyrcha): Average number of labels per issue
         const avgCommentsPerIssue = _.meanBy(issues, issue => issue.comments.length);
-        log(chalk.green(`Average Comments per Issue: ${avgCommentsPerIssue.toFixed(2)}`));
+        log(chalk.greenBright(`Average Comments per Issue: ${avgCommentsPerIssue.toFixed(2)}`));
 
         // PRs
         log(chalk.green(`${pullRequests.length} pull requests retrieved!`));
@@ -85,8 +87,8 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
         log(chalk.green(`Closed PRs: ${closedPRs}`));
         const mergedPRs = _.filter(pullRequests, pullRequest => pullRequest.state === 'MERGED').length;
         log(chalk.green(`Merged PRs: ${mergedPRs}`));
-        const timeToMerge = _.chain(pullRequests).filter(pr => pr.state === 'MERGED').meanBy(pr => Date.parse(pr.mergedAt) - Date.parse(pr.createdAt)).value()/millisToDays;
-        log(chalk.green(`Average Time to Merge: ${timeToMerge.toFixed(2)} days`));
+        const timeToMerge = _.chain(pullRequests).filter(pr => pr.state === 'MERGED').meanBy(pr => Date.parse(pr.mergedAt) - Date.parse(pr.createdAt)).value();
+        log(chalk.green(`Average Time to Merge: ${prettyMilliseconds(timeToMerge)}`));
         const avgCommentsPerPR = _.meanBy(pullRequests, pr => pr.comments.length);
         log(chalk.green(`Average Comments per PR: ${avgCommentsPerPR.toFixed(2)}`));
         const avgCommentsPerPRClosedMerged = _.chain(pullRequests).filter(pr => pr.state === 'MERGED' || pr.state === 'CLOSED').meanBy(pr => pr.comments.length).value();
@@ -97,6 +99,8 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
             pr.reviews.length + pr.comments.length + _.chain(pr.reviews).map(review => review.comments).flatten().value().length
             )).value();
         log(chalk.green(`Average Interactions (comments, reviews, review comments) per PR (Closed or Merged): ${avgInteractionsPerPRClosedMerged.toFixed(2)}`));
+        var end = new Date() - start
+        log(`Retrieval and calculation time: ${prettyMilliseconds((end))}`);
         process.exit(0);
     } catch (err) {
         spinner.fail('Retriever broke...');
