@@ -39,12 +39,15 @@ const millisToDays = millisToHours*24;
 const pageSize = 50;
 const smallPageSize = 50;
 
-const graphqlWithAuth = graphql.defaults({
-    baseUrl: `${ghUrl}`,
-    headers: {
-      authorization: `token ${ghToken}`
-    }
-});
+let graphqlOpts = {
+  headers: {
+    authorization: `token ${ghToken}`
+  }
+}
+
+if(ghUrl) graphqlOpts = {...graphqlOpts, baseUrl: `${ghUrl}`};
+
+const graphqlWithAuth = graphql.defaults(graphqlOpts);
 
 let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}`).start();
 
@@ -106,8 +109,7 @@ let spinner = ora(`Start gathering data for ${chalk.green(account + "/" + repo)}
         process.exit(0);
     } catch (err) {
         spinner.fail('Retriever broke...');
-        log(chalk.red(err));
-        log(chalk.red(err.stacktrace));
+        log(chalk.red(err.stack));
         process.exit(1);
     }
 })();
