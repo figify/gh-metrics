@@ -221,6 +221,7 @@ async function downloadPullRequestReviews(client, pr, pageSize, preFetched) {
   }
 };
 
+// https://github.community/t5/GitHub-API-Development-and/Bug-v4-GraphQL-API-Trouble-retrieving-pull-request-review/td-p/17524
 async function downloadPullRequestReviewThreads(client, id, pageSize, preFetched) {
   try {
     let threads = preFetched.edges.map(edge => edge.node);
