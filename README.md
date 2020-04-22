@@ -10,7 +10,7 @@
 
 Run the tool using `npx`:
 
-`GITHUB_TOKEN=<yout-token> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
+`GITHUB_TOKEN=<your-token> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
 
 or straight:
 
@@ -20,7 +20,7 @@ if you have a `GITHUB_TOKEN` environment variable already set.
 
 Example for a dependency used:
 
-`GITHUB_TOKEN=<yout-token> npx @figify/gh-metrics --a sindresorhus --r ora`
+`GITHUB_TOKEN=<your-token> npx @figify/gh-metrics --a sindresorhus --r ora`
 
 ### With GitHub Enterprise
 
@@ -28,7 +28,11 @@ Set the `GITHUB_URL` environment variable (i.e. `https://<github-enterprise-host
 
 `GITHUB_URL=<your-url> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
 
-if you have a `GITHUB_TOKEN` environment variable already set.
+if you have a `GITHUB_TOKEN` environment variable already set or:
+
+`GITHUB_URL=<your-url> GITHUB_TOKEN=<your-token> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
+
+if not.
 
 ## Metrics
 
