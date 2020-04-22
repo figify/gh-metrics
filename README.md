@@ -22,6 +22,14 @@ Example for a dependency used:
 
 `GITHUB_TOKEN=<yout-token> npx @figify/gh-metrics --a sindresorhus --r ora`
 
+### With GitHub Enterprise
+
+Set the `GITHUB_URL` environment variable (i.e. `https://<github-enterprise-host>/api`):
+
+`GITHUB_URL=<your-url> npx @figify/gh-metrics --a <account org or user> --r <repository name>`
+
+if you have a `GITHUB_TOKEN` environment variable already set.
+
 ## Metrics
 
 The following metrics are calculated:

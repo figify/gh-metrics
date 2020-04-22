@@ -32,6 +32,7 @@ function checks() {
 checks();
 const account = argv.a;
 const repo = argv.r;
+const ghUrl = process.env.GITHUB_URL;
 const ghToken = process.env.GITHUB_TOKEN;
 const millisToHours = 1000*60*60;
 const millisToDays = millisToHours*24;
@@ -39,6 +40,7 @@ const pageSize = 50;
 const smallPageSize = 50;
 
 const graphqlWithAuth = graphql.defaults({
+    baseUrl: `${ghUrl}`,
     headers: {
       authorization: `token ${ghToken}`
     }
