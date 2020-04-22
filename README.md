@@ -1,5 +1,7 @@
 # gh-metrics
 
+[![](https://img.shields.io/npm/v/@figify/gh-metrics)](https://www.npmjs.com/package/@figify/gh-metrics)
+
 > A command line tool that calculates pull-request and issue metrics given a GitHub repository
 
 ![](assets/gh-metrics-usage.gif)
@@ -71,6 +73,7 @@ Example because I forget:
 - `git tag -a v0.1.0 -m "Version 0.1.0 - First working version"`
 - `git push origin v0.1.0`
 -  `npm publish --access public --dry-run`
+-  `npm publish --access public`
 
 ## License
 
