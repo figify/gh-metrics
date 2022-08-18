@@ -1,6 +1,6 @@
 {
   "name": "@figify/gh-metrics",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A tool for calculating issues and pull requests metrics on GitHub given a repository",
   "main": "index.js",
   "bin": {
